@@ -1,7 +1,7 @@
 ##################################################################
 # Brian Lesko 
 # 12/2/2023
-# Robotics Studies, control a robot with a ps5 controller
+# Robotics Studies, control a virtual robot with a ps5 controller
 
 import streamlit as st
 import numpy as np
@@ -41,10 +41,6 @@ def main():
     th = robot.CyclicVariable(thetas)
     loop, loops = 0, 1000
 
-    # Calibrate trigger resistance
-    #ds.set_trigger()
-    #ds.send_outReport()
-
     # Control Loop
     for i in range(loops):
         ds.receive()
@@ -54,7 +50,6 @@ def main():
         # Determine which joint is selected
         j1 = "<span style='font-size:30px;'>J1</span>" if th.index == 0 else "<span style='font-size:20px;'>J1</span>"
         j2 = "<span style='font-size:30px;'>J2</span>" if th.index == 1 else "<span style='font-size:20px;'>J2</span>"
-        # Create the inventory bar
         with Title: st.markdown(f" &nbsp; &nbsp; &nbsp; &nbsp;<L1/R1> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{j1} &nbsp; | &nbsp; {j2} &nbsp; ", unsafe_allow_html=True)
 
         # Increment and decrement the controlled joint index based on the L1 and R1 buttons
@@ -68,39 +63,19 @@ def main():
         # Button Control
         i = th.index
         if ds.L2 > 0:
-            thetas[i] = thetas[i] + step*ds.L2/2
+            thetas[i] = thetas[i] + step*ds.L2/1.5
         if ds.R2 > 0:
-            thetas[i] = thetas[i] - step*ds.R2/2
-
-        limit = np.pi
-        if np.abs(thetas[i]) > limit: 
-            ds.lights(rgb=(255,0,0))
-            ds.set_trigger()
-            ds.set_trigger(mode=1, intensities=[255,255,255,255,255,255,255])
-            ds.send_outReport()
-        else: 
-            ds.lights(rgb=(0,255,0))
-            ds.set_trigger(mode=0, intensities=[0,0,0,0,0,0,0])
-            ds.send_outReport()
+            thetas[i] = thetas[i] - step*ds.R2/1.5
 
         # Thumbstick control
-        with Sidebar: st.write(f" -180 < Current Angle: {round(math.degrees(thetas[i]),1)} < 180")
-        # Increment or decrement the current angle until it reaches the desired angle, set by the joystick
-        deadzone = 4
-        if abs(ds.RX) > deadzone or abs(ds.RY) > deadzone:
-            desired_angle = - math.atan2(ds.RY, ds.RX)
-            # Calculate the shortest path to the desired angle
-            if abs(desired_angle - thetas[i]) > math.pi:
-                if desired_angle < thetas[i]:
-                    desired_angle += 2 * math.pi
-                else:
-                    desired_angle -= 2 * math.pi
-            current_angle = thetas[i]
-            distance_to_goal = abs(current_angle - desired_angle)
-            if desired_angle > current_angle:
-                thetas[i] = thetas[i] + step*222*(distance_to_goal)**.9
-            elif desired_angle < current_angle:
-                thetas[i] = thetas[i] - step*222*(distance_to_goal)**.9
+        ds.updateThumbsticks()
+        if ds.RX > 4 or ds.RX < -4:
+            with Sidebar: st.write("Desired Angle: ", math.degrees(ds.Rthumb)) # + "Current Angle: " + thetas[i]
+            distance = ds.Rthumb - thetas[i]
+            # Adjust distance to be between -pi and pi
+            while distance < -math.pi: distance += 2 * math.pi
+            while distance > math.pi:  distance -= 2 * math.pi
+            thetas[i] = thetas[i] + step*333*(distance)
 
         # Show the robot
         fig = my_robot.get_robot_figure(thetas[0],thetas[1])

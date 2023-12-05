@@ -5,6 +5,7 @@
 
 import hid
 import numpy as np
+import math
 
 class DualSense:
 
@@ -240,10 +241,20 @@ class DualSense:
 
     def updateThumbsticks(self):
         data = self.data
+        # Raw data
         self.LX = data[1] - 127
         self.LY = data[2] - 127
         self.RX = data[3] - 127
         self.RY = data[4] - 127
+
+        # Calculate angle (Always is between -pi and pi)
+        deadzone = 4
+        if abs(self.RX) > deadzone or abs(self.RY) > deadzone:
+            self.Rthumb = - math.atan2(self.RY, self.RX)
+        else: self.Rthumb = 0
+        if abs(self.LX) > deadzone or abs(self.LY) > deadzone:
+            self.Lthumb = - math.atan2(self.LY, self.LX)
+        else: self.Lthumb = 0
 
     def updateMisc(self):
         misc = self.data[9]
