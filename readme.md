@@ -1,6 +1,8 @@
 
-# Maze Runner Game
-This code implements a Maze running game using a wired Dualsense (PS5) controller. Use the touchpad as the input. The code is rritten in [Pure Python](https://github.com/BrianLesko/maze-runner/blob/main/app.py) in under 100 lines. Created by Brian Lesko for Learning Purposes.
+# R2-Dualsense2
+This code implements three of my previous projects. Firstly, Sony's Dualsense controller is used for UI inputs within python. Second, animating open chained robotic linkages. Lastly, using a custom class for quick sylized UI development.
+
+written in [Pure Python](https://github.com/BrianLesko/maze-runner/blob/main/app.py) in under 100 lines. Created by Brian Lesko for Learning Purposes.
 
 
 &nbsp;
