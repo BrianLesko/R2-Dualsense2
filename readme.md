@@ -1,6 +1,6 @@
 
 # R2-Dualsense2
-This code implements the control of a double joint robot using Sony's Dualsense (PS5) controller. The robot is visualized using the Streamlit library and is perfectly responsive. This project is written in [Pure Python]() in under 100 lines of code. Created by Brian Lesko for Learning Purposes. Note: Although this robot is two joints, the control scheme is scalable to more complex systems.
+This code implements the control of a double joint robot using Sony's Dualsense (PS5) controller. The robot is visualized using the Streamlit library and is perfectly responsive. This project is written in [Pure Python]() in under 100 lines of code. Created by Brian Lesko for Learning Purposes.
 
 &nbsp;
 
