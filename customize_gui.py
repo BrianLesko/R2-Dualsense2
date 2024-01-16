@@ -43,10 +43,8 @@ class gui:
                 """
         st.markdown(hide_st_style, unsafe_allow_html=True)
 
-    def display_existing_messages(self):
-        if "messages" not in st.session_state:
-            st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}]
-        for msg in st.session_state.messages:
+    def display_existing_messages(self,state):
+        for msg in state.messages:
             st.chat_message(msg["role"]).write(msg["content"])
 
     def quick_setup(self,wide=False, text="In this code we ... "):
