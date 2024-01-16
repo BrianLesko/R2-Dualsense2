@@ -30,6 +30,23 @@ class two2_robot:
         self.thetas = [self.th1,self.th2]
         self.th = CyclicVariable(self.thetas)
 
+    @staticmethod
+    def get_colored_plt(hex, hex2, hex3 = '#D6D6D6'):
+            # hex1 is the background color   # hex2 is the text color    # hex3 is the secondary color
+            fig, ax = plt.subplots()
+            ax.set_facecolor(hex)  
+            fig.set_facecolor(hex) 
+            for item in ax.get_xticklabels() + ax.get_yticklabels() + ax.get_xgridlines() + ax.get_ygridlines():
+                item.set_color(hex2)
+            for item in list(ax.spines.values()):
+                item.set_color(hex3)
+            ax.tick_params(colors=hex3, axis='both', which='major', labelsize=8)
+            ax.set_xlabel('X', color=hex3)
+            ax.set_ylabel('Y', color=hex3)
+            for spine in ax.spines.values():
+                spine.set_linewidth(2)  # Change '2' to your desired linewidth
+            return fig, ax
+
     def getT_list(self):
         # The link lengths are defined as L1 and L2, or L = [L1 L2]'
         th = [self.th1, self.th2]
@@ -76,27 +93,11 @@ class two2_robot:
 
     def get_robot_figure(self, th1, th2, Axes = False):
 
-        def get_colored_plt(hex, hex2, hex3 = '#D6D6D6'):
-            # hex1 is the background color   # hex2 is the text color    # hex3 is the secondary color
-            fig, ax = plt.subplots()
-            ax.set_facecolor(hex)  
-            fig.set_facecolor(hex) 
-            for item in ax.get_xticklabels() + ax.get_yticklabels() + ax.get_xgridlines() + ax.get_ygridlines():
-                item.set_color(hex2)
-            for item in list(ax.spines.values()):
-                item.set_color(hex3)
-            ax.tick_params(colors=hex3, axis='both', which='major', labelsize=8)
-            ax.set_xlabel('X', color=hex3)
-            ax.set_ylabel('Y', color=hex3)
-            for spine in ax.spines.values():
-                spine.set_linewidth(2)  # Change '2' to your desired linewidth
-            return fig, ax
-
         self.th1 = th1
         self.th2 = th2
 
         T_list = self.getT_list()
-        fig, ax = get_colored_plt('#F6F6F3','#335095','#D6D6D6')
+        fig, ax = self.get_colored_plt('#F6F6F3','#335095','#D6D6D6')
 
         def set_axes(ax, xlim=[-2,4], ylim=[-2,2], xlabel='X', ylabel='Y', aspect='equal', integer=True):
             ax.set(xlim=xlim, ylim=ylim, xlabel=xlabel, ylabel=ylabel, aspect=aspect)
